@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        table { border-collapse: collapse; }
+        td { width: 60px; height: 60px; text-align: center; font-size: 24px; border: 1px solid #000; }
+    </style>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <h2>Current Turn: {{ game.current_turn }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {% for row in 0|make_list:3 %}
+            <tr>
+                {% for col in 0|make_list:3 %}
+                <td>
+                    {% with index=row*3+col %}
+                        {% if game.board|slice:index:index|add:"1" == ' ' %}
+                            <button type="submit" name="position" value="{{ index }}">{{ game.board|slice:index:index|add:"1" }}</button>
+                        {% else %}
+                            {{ game.board|slice:index:index|add:"1" }}
+                        {% endif %}
+                    {% endwith %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+    {% if winner %}
+        <h2>{{ winner }} Wins!</h2>
+        <a href="/">Start New Game</a>
+    {% endif %}
+</body>
+</html>
